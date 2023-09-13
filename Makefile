@@ -1,4 +1,4 @@
-BUILD_TAG := 1.0.1
+BUILD_TAG := v1.0.1
 IMAGE_NAME ?= mattermost/pgbouncer-config-reload
 all: container scan push
 container:
