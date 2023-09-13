@@ -1,0 +1,6 @@
+*.sw?
+venv
+pgbouncer-*.tgz
+__pycache__
+.pytest_cache
+*.bkp

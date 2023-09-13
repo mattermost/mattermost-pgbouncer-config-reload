@@ -1,0 +1,35 @@
+version: '2'
+
+services:
+  pgbouncer:
+    image: wallarm/pgbouncer:1.0.0
+    volumes:
+      - "./pgbouncer:/etc/pgbouncer"
+      - "./userlist:/etc/userlist"
+    ports:
+      - "127.0.0.1:16432:5432"
+  pg:
+    image: postgres:9.6-alpine
+    restart: always
+    volumes:
+      - "../tests/pg:/docker-entrypoint-initdb.d"
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - "127.0.0.1:15432:5432"
+  control:
+    build:
+      context: ../.
+    depends_on: ["pgbouncer"]
+    image: pgbouncer-config-reload
+    volumes:
+      - "./pgbouncer:/etc/pgbouncer"
+      - "./userlist:/etc/userlist"
+    environment:
+      CONFIG_PATH: /etc/pgbouncer;/etc/userlist
+      PGBOUNCER_HOST: pgbouncer
+      PGBOUNCER_PORT: 5432
+      PGBOUNCER_USER: admin
+      PGBOUNCER_PASSWORD: xaod4yeeS5ohsh7chaesh0Quichauv8o
+      PGBOUNCER_RELOAD_TIMEOUT: 10
+      LOG_JSON: 1

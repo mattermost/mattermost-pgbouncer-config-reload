@@ -1,0 +1,23 @@
+#!/bin/sh
+
+help()
+{
+  echo "$(basename "$0") [-h] [\"Quoted pgbouncer command\"] -- utils for faster access to pgbouncer console or execute command"
+  echo "where:"
+  echo "\t-h - display this message"
+}
+
+HOST=${PGBOUNCER_HOST:-127.0.0.1}
+PORT=${PGBOUNCER_PORT:-5432}
+USER=${PGBOUNCER_USER:-admin}
+DATABASE=${PGBOUNCER_DATABASE:-pgbouncer}
+
+
+CMD="psql -h $HOST -p $PORT -U $USER -d $DATABASE"
+if [ $# -eq 0 ]; then
+  PGPASSWORD=$PGBOUNCER_PASSWORD $CMD
+elif [ "$1" = "-h" ]; then
+  help
+else
+  PGPASSWORD=$PGBOUNCER_PASSWORD $CMD -c "$@"
+fi
