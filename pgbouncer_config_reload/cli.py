@@ -168,7 +168,7 @@ def main():
     if args.json_log:
         from pythonjsonlogger import jsonlogger
         formatter = jsonlogger.JsonFormatter(
-                fmt="(asctime) (levelname) (message)",
+                fmt="%(asctime)s %(levelname)s %(message)s",
                 datefmt="%Y-%m-%d %H:%M:%S")
         handler.setFormatter(formatter)
     else:
