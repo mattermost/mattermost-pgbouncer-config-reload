@@ -14,6 +14,11 @@ COPY . /opt
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
+# Make the cli.py script and pgbouncerctl script executable and move them to /usr/local/bin
+RUN chmod +x pgbouncer_config_reload/cli.py bin/pgbouncerctl && \
+    mv pgbouncer_config_reload/cli.py /usr/local/bin/pgbouncer-config-reload && \
+    mv bin/pgbouncerctl /usr/local/bin/
+
 # Set necessary volumes
 VOLUME ["/etc/pgbouncer/", "/etc/userlist/"]
 
