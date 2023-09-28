@@ -1,21 +1,24 @@
+# Use python:3-alpine as the base image
 FROM python:3-alpine as base
 
-FROM base as builder
+# Install necessary system dependencies
+RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev postgresql-client libpq
 
-ADD . /setup
-RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
-RUN pip install --no-cache-dir --upgrade pip
-RUN cd /setup && python setup.py install
-
-FROM base
-
+# Set working directory
 WORKDIR /opt
 
-COPY --from=builder /usr/local/bin /usr/local/bin/
-COPY --from=builder /usr/local/lib /usr/local/lib/
-RUN apk add --no-cache postgresql-client libpq
+# Copy the current directory contents into the container at /opt
+COPY . /opt
 
+# Upgrade pip and install Python dependencies from requirements.txt
+RUN pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
+
+# Set necessary volumes
 VOLUME ["/etc/pgbouncer/", "/etc/userlist/"]
 
+# Switch to a non-root user
 USER nobody
+
+# Set the entry point for the container
 ENTRYPOINT ["pgbouncer-config-reload", "-vv"]
