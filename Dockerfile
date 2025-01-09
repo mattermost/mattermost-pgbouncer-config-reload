@@ -1,5 +1,5 @@
 # Use python:3-alpine as the base image
-FROM python:3-alpine as base
+FROM --platform=${TARGETPLATFORM} python:3-alpine as base
 
 # Install necessary system dependencies
 RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev postgresql-client libpq

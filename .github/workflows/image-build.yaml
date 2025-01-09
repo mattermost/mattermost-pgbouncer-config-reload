@@ -26,4 +26,4 @@ jobs:
         env:
           TAG: ${{ github.ref_name }}
         run: |
-          docker buildx build --push -t mattermost/pgbouncer-config-reload:${TAG} .
+          docker buildx build --platform linux/amd64,linux/arm64 --push -t mattermost/pgbouncer-config-reload:${TAG} .
